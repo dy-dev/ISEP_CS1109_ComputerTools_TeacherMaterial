@@ -1,0 +1,5 @@
+# Exclure les fichiers meta du repo prof des archives Git
+# (git archive utilise ces règles pour les zip distribués aux étudiants)
+README.md      export-ignore
+scripts/       export-ignore
+.gitattributes export-ignore
