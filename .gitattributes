@@ -1,0 +1,8 @@
+# Exclus des archives distribuées aux étudiants (git archive)
+/README.md     export-ignore
+_prof/         export-ignore
+scripts/       export-ignore
+.gitattributes export-ignore
+
+# Scripts shell : toujours en LF, même sur Windows
+*.sh text eol=lf
