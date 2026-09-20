@@ -1,0 +1,10 @@
+build/
+cmake-build-*/
+*.o
+*.obj
+*.exe
+runner
+runner.exe
+.idea/
+.vscode/
+.DS_Store
