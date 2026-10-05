@@ -1,84 +1,81 @@
 // src/main.cpp
 //
-// Runner orchestrator: only the game loop remains here. All the logic lives in
-// Board (display, world) and Player (input, collision). We include their .h to
-// find the functions that were moved out.
+// Runner orchestrator, Raylib version. The loop runs 60 times per second and
+// reads the keyboard on every frame: the world is continuous now.
 
 #include <algorithm>
-#include <cstdlib>
-#include <ctime>
-#include <iostream>
-#include <string>
 #include <vector>
+
+#include "raylib.h"
 
 #include "Board.h"
 #include "Player.h"
 
-#ifdef _WIN32
-    #define CLEAR_SCREEN "cls"
-#else
-    #define CLEAR_SCREEN "clear"
-#endif
-
-
 int main() {
-    std::srand(static_cast<unsigned>(std::time(nullptr)));
-
-    std::cout << "Runner CS.1109\n";
-    std::cout << "Controls: 's' to jump, Enter to move forward, 'q' to quit\n";
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Runner CS.1109");
+    SetTargetFPS(60);
 
     Position player = { PLAYER_X, GROUND_Y };
     std::vector<Position> obstacles;
-    int score = 0;
-    bool airborneLastTurn = false;   // the player stays up for one turn after a jump
+    int   score = 0;
+    float scoreTime = 0.0f;   // seconds elapsed, feeds the score
     int lives = LIVES_INIT;
+    float velocityY = 0.0f;
+    float spawnTimer = 0.0f;
+    float hitCooldown = 0.0f;   // avoids losing several lives on one obstacle
 
-    while (lives > 0) {
-        displayState(player, obstacles, score, lives);
-        std::cout << "> ";
+    const float SPAWN_INTERVAL = 1.5f;
 
-        std::string line;
-        if (!std::getline(std::cin, line)) {
+    while (!WindowShouldClose() && lives > 0) {
+        float dt = GetFrameTime();
+
+        if (handleInput(player, velocityY)) {
             break;
         }
+        updateJump(player, velocityY, dt);
 
-        char command = line.empty() ? '\0' : line[0];
-        if (handleInput(command, player)) {
-            break;
-        }
-
+        // Scroll the obstacles to the left
         for (Position& obs : obstacles) {
-            obs.x -= 1;
+            obs.x -= SPEED * dt;
         }
 
+        // Remove obstacles that left the screen
         obstacles.erase(
             std::remove_if(obstacles.begin(), obstacles.end(),
-                           [](const Position& p) { return p.x < 0; }),
+                           [](const Position& p) { return p.x + PLAYER_SIZE < 0.0f; }),
             obstacles.end());
 
-        if (std::rand() % 3 == 0) {
-            int y = (std::rand() % 2 == 0) ? GROUND_Y : TOP_Y;
-            obstacles.push_back({ WIDTH - 1, y });
+        // Spawn an obstacle at a regular interval
+        spawnTimer += dt;
+        if (spawnTimer >= SPAWN_INTERVAL) {
+            spawnTimer = 0.0f;
+            float y = (GetRandomValue(0, 1) == 0) ? GROUND_Y : TOP_Y;
+            obstacles.push_back({ static_cast<float>(SCREEN_WIDTH), y });
         }
 
-        if (checkCollision(player, obstacles)) {
+        // Collision, with a short cooldown so one obstacle costs one life
+        if (hitCooldown > 0.0f) {
+            hitCooldown -= dt;
+        } else if (checkCollision(player, obstacles)) {
             lives -= 1;
-            std::cout << "\n>> COLLISION! Lives left: " << lives << "\n";
+            hitCooldown = 0.5f;
         }
 
-        if (airborneLastTurn) {
-            player.y = GROUND_Y;
-            airborneLastTurn = false;
-        }
+        // Score tied to time, not to the number of frames: the elapsed seconds
+        // are accumulated as a float, the displayed score derives from them.
+        // (score += 10 * dt would truncate to 0 every frame on an int.)
+        scoreTime += dt;
+        score = static_cast<int>(scoreTime * 10.0f);   // ~10 points per second
 
-        if (player.y != GROUND_Y) {
-            airborneLastTurn = true;
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+        displayState(player, obstacles, score, lives);
+        if (lives <= 0) {
+            DrawText("GAME OVER", SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2 - 20, 40, RED);
         }
-
-        std::system(CLEAR_SCREEN);
-        score += 1;
+        EndDrawing();
     }
 
-    std::cout << "\n=== GAME OVER === Final score: " << score << "\n";
+    CloseWindow();
     return 0;
 }

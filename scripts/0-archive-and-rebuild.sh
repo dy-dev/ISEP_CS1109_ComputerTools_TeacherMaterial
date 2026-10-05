@@ -17,6 +17,7 @@ source "$(dirname "$0")/lib.sh"
 
 ARCHIVE="main_deprecated"
 check_repo; check_src; check_clean
+ensure_writable "$CS1109_SRC"
 
 echo "=================================================================="
 echo "  ARCHIVE + RECONSTRUCTION DU DÉPÔT $EXPECTED_REPO"
@@ -43,7 +44,7 @@ else
     info "ancien main sauvegardé dans origin/$ARCHIVE"
 fi
 # archiver aussi les anciens tags starter-* s'ils existent (suffixe _deprecated)
-for t in $(git tag -l 'starter-*' | grep -v '_deprecated$'); do
+for t in $(git tag -l 'starter-*' 'final' | grep -v '_deprecated$'); do
     if ! git rev-parse "${t}_deprecated" >/dev/null 2>&1; then
         git tag "${t}_deprecated" "$t"; git push -q origin "${t}_deprecated"
         info "ancien tag $t archivé en ${t}_deprecated"
@@ -66,14 +67,16 @@ chmod +x scripts/*.sh 2>/dev/null || true
 
 step "4/7 fichiers de protocole"
 cat > .gitattributes << 'ATTR'
+# Les scripts restent en fins de ligne LF, même clonés sous Windows :
+# un .sh en CRLF est inutilisable par les co-enseignants (bad interpreter).
+*.sh text eol=lf
+
 # Exclus des archives distribuées aux étudiants (git archive)
 /README.md     export-ignore
+README_TEACHER_*.md export-ignore
 _prof/         export-ignore
 scripts/       export-ignore
 .gitattributes export-ignore
-
-# Scripts shell : toujours en LF, même sur Windows
-*.sh text eol=lf
 ATTR
 cat > README.md << 'RM'
 # CS.1109 — Teacher Materials
@@ -88,8 +91,16 @@ séance par séance, pour le module CS.1109 « Outils de développement » (ISEP
 | `starter-s02` | S2     | Squelette runner.cpp + CMakeLists minimal        |
 | `starter-s03` | S3     | Runner console complet + examples/split_pattern  |
 | `starter-s04` | S4     | Runner splitté Board / Player / main             |
+| `starter-s05` | S5     | Runner Raylib : fenêtre, saut, obstacles, HUD    |
+| `starter-s06` | S6     | Runner POO avec 3 bugs plantés (à déboguer)      |
+| `starter-s07` | S7     | Runner POO corrigé + tests Catch2                |
+| `starter-s08` | S8     | + Dockerfile multi-stage (tests en conteneur)    |
+| `starter-s09` | S9     | + workflow GitHub Actions + badge                |
+| `final`       | S10    | Projet finalisé : clang-format, build.sh, README, soutenance.md |
 
 Règle : le point de départ d'une séance = le corrigé de la précédente.
+Exception S6 : le starter est le corrigé S5 dans lequel 3 bugs ont été plantés
+(le corrigé S5 sans bugs est 05_, le starter distribué est 05b_).
 Le tronc `main` = le starter le plus récent.
 
 ## Historique
@@ -123,6 +134,12 @@ publish_link() {
 publish_link "01_S2_Starter/CS1109_Runner_Starter"                     "starter-s02" "S2 starter : squelette runner.cpp + CMakeLists minimal"
 publish_link "02_S3_Start_equals_S2_Solution/CS1109_Runner_S3_Start"   "starter-s03" "S3 starter : runner console complet + examples/split_pattern"
 publish_link "03_S4_Start_equals_S3_Solution/CS1109_Runner_S4_Start"   "starter-s04" "S4 starter : runner splitté Board/Player/main"
+publish_link "04_S5_Start_equals_S4_Solution/CS1109_Runner_S5_Start"   "starter-s05" "S5 starter : runner Raylib (fenêtre, saut, obstacles, HUD)"
+publish_link "05b_S6_Starter_with_bugs/CS1109_Runner_S6_Start"           "starter-s06" "S6 starter : runner POO avec 3 bugs plantés (débogage)"
+publish_link "06_S7_Start_equals_S6_Solution/CS1109_Runner_S7_Start"   "starter-s07" "S7 starter : runner POO corrigé + tests Catch2 (runner_core)"
+publish_link "07_S8_Start_equals_S7_Solution/CS1109_Runner_S8_Start"   "starter-s08" "S8 starter : + Dockerfile multi-stage, tests dans le conteneur"
+publish_link "08_S9_Start_equals_S8_Solution/CS1109_Runner_S9_Start"   "starter-s09" "S9 starter : + workflow GitHub Actions (build, tests, docker) + badge"
+publish_link "09_Final_equals_S9_Solution/CS1109_Runner_Final"          "final"       "Projet final : clang-format, build.sh, README complet, plan de soutenance"
 
 step "6/7 remplacer main sur le remote (l'ancien est dans $ARCHIVE)"
 git branch -D main 2>/dev/null || true
