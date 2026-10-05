@@ -1,24 +1,35 @@
 // include/Player.h
 //
-// Player: the player logic.
-//   - handleInput: reacts to a key (jump, quit)
-//   - checkCollision: tests whether the player hits an obstacle
-//
-// Player needs the Position struct defined in Board.h, so it includes Board.h
-// here. Board.h's include guards prevent any double inclusion.
+// Player: a GameObject that jumps on Space and falls back under gravity.
+// The vertical speed lives inside the object instead of being scattered
+// across main.
 
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <vector>
+#include "GameObject.h"
 
-#include "Board.h"  // for Position
+class Player : public GameObject {
+public:
+    Player(float x, float y, int size);
 
-// Applies the command to the player. Returns true if the player wants to quit.
-bool handleInput(char command, Position& player);
+    // Reads the keyboard: calls jump() on Space.
+    void handleInput();
 
-// Returns true if the player occupies the same cell as an obstacle.
-bool checkCollision(const Position& player,
-                    const std::vector<Position>& obstacles);
+    // Gives the player an upward speed if it is on the ground. Pure logic,
+    // no Raylib: this is what the tests exercise.
+    void jump();
+
+    // Applies gravity to the vertical speed, moves the player, and puts it
+    // back on the ground when it lands. Pure logic, no Raylib call.
+    void update(float dt) override;
+
+    void draw() const override;
+
+    bool isOnGround() const;
+
+private:
+    float m_velocityY;   // pixels per second, negative upwards
+};
 
 #endif  // PLAYER_H
