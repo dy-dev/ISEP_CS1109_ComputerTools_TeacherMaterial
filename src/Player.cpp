@@ -1,25 +1,38 @@
 // src/Player.cpp
-//
-// Definition of what is declared in Player.h.
 
 #include "Player.h"
 
-bool handleInput(char command, Position& player) {
-    if (command == 'q') {
-        return true;
+#include "Board.h"
+
+Player::Player(float x, float y, int size)
+    : GameObject(x, y, size), m_velocityY(0.0f) {}
+
+void Player::handleInput() {
+    if (IsKeyPressed(KEY_SPACE)) {
+        jump();
     }
-    if (command == 's' && player.y == GROUND_Y) {
-        player.y = TOP_Y;
-    }
-    return false;
 }
 
-bool checkCollision(const Position& player,
-                    const std::vector<Position>& obstacles) {
-    for (const Position& obs : obstacles) {
-        if (obs.x == player.x && obs.y == player.y) {
-            return true;
-        }
+void Player::jump() {
+    if (isOnGround()) {
+        m_velocityY = JUMP_SPEED;
     }
-    return false;
+}
+
+void Player::update(float dt) {
+    m_velocityY += GRAVITY * dt;   // gravity pulls the vertical speed down
+    m_y += m_velocityY * dt;       // the speed moves the player
+
+    if (m_y >= GROUND_Y) {         // landed: snap back, never compare floats with ==
+        m_y = GROUND_Y;
+        m_velocityY = 0.0f;
+    }
+}
+
+void Player::draw() const {
+    DrawRectangle(static_cast<int>(m_x), static_cast<int>(m_y), m_size, m_size, RED);
+}
+
+bool Player::isOnGround() const {
+    return m_y >= GROUND_Y;
 }
