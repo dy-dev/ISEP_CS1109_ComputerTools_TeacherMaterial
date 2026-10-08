@@ -30,6 +30,9 @@ int main() {
     int   score = 0;
     float scoreTime = 0.0f;   // seconds elapsed, feeds the score
     int   lives = LIVES_INIT;
+    loadScenery();          // bonus: optional scenery
+    player.loadSprites();   // bonus: optional sprites
+
     float spawnTimer  = 0.0f;
     float hitCooldown = 0.0f;
     const float SPAWN_INTERVAL = 1.5f;
@@ -81,6 +84,8 @@ int main() {
         // --- draw: every object draws itself ---
         BeginDrawing();
         ClearBackground(RAYWHITE);
+        updateScenery(dt);
+        drawScenery();
         drawBoard(score, lives);
         for (const std::unique_ptr<GameObject>& obj : obstacles) {
             obj->draw();                           // virtual call: Obstacle::draw
@@ -92,6 +97,8 @@ int main() {
         EndDrawing();
     }
 
+    player.unloadSprites();
+    unloadScenery();
     CloseWindow();
     return 0;
 }

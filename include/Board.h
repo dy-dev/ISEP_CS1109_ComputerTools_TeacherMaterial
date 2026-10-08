@@ -22,4 +22,17 @@ extern const int   LIVES_INIT;      // lives at startup
 // Draws the ground band and the HUD (score, lives).
 void drawBoard(int score, int lives);
 
+// --- optional scenery (bonus) -------------------------------------------
+// True once the scenery textures are loaded (the ground band is then useless).
+bool sceneryLoaded();
+
+// Loads the three background layers; call once after InitWindow.
+void loadScenery();
+// Scrolls the layers; dt in seconds, like every update of the project.
+void updateScenery(float dt);
+// Draws the three layers, farthest first. Call before everything else.
+void drawScenery();
+// Releases the textures; call before CloseWindow.
+void unloadScenery();
+
 #endif  // BOARD_H

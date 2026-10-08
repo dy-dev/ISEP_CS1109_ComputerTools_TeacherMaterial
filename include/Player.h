@@ -28,8 +28,23 @@ public:
 
     bool isOnGround() const;
 
+    // --- optional sprite (bonus) ---
+    // Loads the two poses; call once after InitWindow.
+    void loadSprites();
+    void unloadSprites();
+
 private:
     float m_velocityY;   // pixels per second, negative upwards
+
+    // Two still images, picked from the state: no animation timer.
+    float m_distance = 0.0f;   // distance parcourue par le décor, en pixels :
+                               // c'est elle qui choisit la pose de course,
+                               // jamais un compteur de temps.
+
+    Texture2D m_runTextures[3]{};   // trois poses de course
+    Texture2D m_jumpTexture{};      // montée
+    Texture2D m_fallTexture{};      // descente
+    bool      m_hasSprites = false;
 };
 
 #endif  // PLAYER_H

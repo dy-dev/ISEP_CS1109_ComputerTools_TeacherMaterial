@@ -22,3 +22,10 @@ add_executable(runner
 
 target_include_directories(runner PRIVATE include)
 target_link_libraries(runner PRIVATE raylib)
+
+# Copie les ressources à côté de l'exécutable après chaque build : le dossier de
+# build n'est pas dans le projet, sinon LoadTexture ne trouverait rien.
+add_custom_command(TARGET runner POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${CMAKE_CURRENT_SOURCE_DIR}/resources
+            $<TARGET_FILE_DIR:runner>/resources)
