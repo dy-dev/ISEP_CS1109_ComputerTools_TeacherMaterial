@@ -63,7 +63,7 @@ int main() {
 
         // --- rules: collisions with a short cooldown ---
         if (hitCooldown > 0.0f) {
-            // cooldown active: ignore collisions
+            hitCooldown -= dt;
         } else {
             for (const std::unique_ptr<GameObject>& obj : obstacles) {
                 if (CheckCollisionRecs(player.getBounds(), obj->getBounds())) {
