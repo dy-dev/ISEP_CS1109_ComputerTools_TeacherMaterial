@@ -15,7 +15,9 @@ FetchContent_MakeAvailable(raylib)
 add_executable(runner
     src/main.cpp
     src/Board.cpp
+    src/GameObject.cpp
     src/Player.cpp
+    src/Obstacle.cpp
 )
 
 target_include_directories(runner PRIVATE include)

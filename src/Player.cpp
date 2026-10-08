@@ -1,40 +1,39 @@
 // src/Player.cpp
-//
-// Definition of what is declared in Player.h.
 
 #include "Player.h"
 
-#include "raylib.h"
+#include "Board.h"
 
-bool handleInput(Position& player, float& velocityY) {
-    if (IsKeyPressed(KEY_ESCAPE)) {
-        return true;
-    }
-    // On the ground: y never goes below GROUND_Y, so >= means "landed".
-    if (IsKeyPressed(KEY_SPACE) && player.y >= GROUND_Y) {
-        velocityY = JUMP_SPEED;
-    }
-    return false;
+Player::Player(float x, float y, int size)
+    : GameObject(x, y, size), m_velocityY(0.0f) {
 }
 
-void updateJump(Position& player, float& velocityY, float dt) {
-    velocityY += GRAVITY * dt;      // gravity pulls the vertical speed down
-    player.y += velocityY * dt;     // the speed moves the player
-
-    if (player.y >= GROUND_Y) {     // landed: snap back, never compare floats with ==
-        player.y = GROUND_Y;
-        velocityY = 0.0f;
+void Player::handleInput() {
+    if (IsKeyPressed(KEY_SPACE)) {
+        jump();
     }
 }
 
-bool checkCollision(const Position& player,
-                    const std::vector<Position>& obstacles) {
-    for (const Position& obs : obstacles) {
-        bool overlapX = player.x < obs.x + PLAYER_SIZE && obs.x < player.x + PLAYER_SIZE;
-        bool overlapY = player.y < obs.y + PLAYER_SIZE && obs.y < player.y + PLAYER_SIZE;
-        if (overlapX && overlapY) {
-            return true;
-        }
+void Player::jump() {
+    if (isOnGround()) {
+        m_velocityY = JUMP_SPEED;
     }
-    return false;
+}
+
+void Player::update(float dt) {
+    m_velocityY += GRAVITY * dt;   // gravity pulls the vertical speed down
+    m_y += m_velocityY * dt;       // the speed moves the player
+
+    if (m_y >= GROUND_Y) {         // landed: snap back, never compare floats with ==
+        m_y = GROUND_Y;
+        m_velocityY = 0.0f;
+    }
+}
+
+void Player::draw() const {
+    DrawRectangle(static_cast<int>(m_x), static_cast<int>(m_y), m_size, m_size, RED);
+}
+
+bool Player::isOnGround() const {
+    return m_y >= GROUND_Y;
 }

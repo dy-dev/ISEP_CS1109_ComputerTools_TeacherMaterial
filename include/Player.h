@@ -1,27 +1,35 @@
 // include/Player.h
 //
-// Player: the player logic.
-//   - handleInput: reads the keyboard through Raylib (jump)
-//   - checkCollision: tests whether the player overlaps an obstacle
+// Player: a GameObject that jumps on Space and falls back under gravity.
+// The vertical speed lives inside the object instead of being scattered
+// across main.
 
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <vector>
+#include "GameObject.h"
 
-#include "Board.h"  // for Position and the constants
+class Player : public GameObject {
+public:
+    Player(float x, float y, int size);
 
-// Reads the keyboard. Starts a jump on Space when on the ground, by giving
-// the player an upward vertical speed.
-// Returns true if the player asks to quit (Escape).
-bool handleInput(Position& player, float& velocityY);
+    // Reads the keyboard: calls jump() on Space.
+    void handleInput();
 
-// Applies gravity to the vertical speed, moves the player, and puts it back
-// on the ground when it lands.
-void updateJump(Position& player, float& velocityY, float dt);
+    // Gives the player an upward speed if it is on the ground. Pure logic,
+    // no Raylib: this is what the tests exercise.
+    void jump();
 
-// Returns true if the player square overlaps an obstacle square.
-bool checkCollision(const Position& player,
-                    const std::vector<Position>& obstacles);
+    // Applies gravity to the vertical speed, moves the player, and puts it
+    // back on the ground when it lands. Pure logic, no Raylib call.
+    void update(float dt) override;
+
+    void draw() const override;
+
+    bool isOnGround() const;
+
+private:
+    float m_velocityY;   // pixels per second, negative upwards
+};
 
 #endif  // PLAYER_H
