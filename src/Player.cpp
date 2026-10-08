@@ -5,7 +5,8 @@
 #include "Board.h"
 
 Player::Player(float x, float y, int size)
-    : GameObject(x, y, size), m_velocityY(0.0f) {}
+    : GameObject(x, y, size), m_velocityY(0.0f) {
+}
 
 void Player::handleInput() {
     if (IsKeyPressed(KEY_SPACE)) {

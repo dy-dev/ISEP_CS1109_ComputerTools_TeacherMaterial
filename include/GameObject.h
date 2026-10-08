@@ -33,7 +33,7 @@ public:
 protected:
     float m_x;
     float m_y;
-    int m_size;
+    int   m_size;
 };
 
 #endif  // GAMEOBJECT_H

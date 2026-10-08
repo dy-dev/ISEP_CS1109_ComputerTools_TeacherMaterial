@@ -2,10 +2,12 @@
 
 #include "GameObject.h"
 
-GameObject::GameObject(float x, float y, int size) : m_x(x), m_y(y), m_size(size) {}
+GameObject::GameObject(float x, float y, int size)
+    : m_x(x), m_y(y), m_size(size) {
+}
 
 Rectangle GameObject::getBounds() const {
-    return Rectangle{m_x, m_y, static_cast<float>(m_size), static_cast<float>(m_size)};
+    return Rectangle{ m_x, m_y, static_cast<float>(m_size), static_cast<float>(m_size) };
 }
 
 float GameObject::getX() const {

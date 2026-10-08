@@ -4,7 +4,9 @@
 
 #include "Board.h"
 
-Obstacle::Obstacle(float x, float y, int size) : GameObject(x, y, size) {}
+Obstacle::Obstacle(float x, float y, int size)
+    : GameObject(x, y, size) {
+}
 
 void Obstacle::update(float dt) {
     m_x -= SPEED * dt;
