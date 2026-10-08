@@ -11,7 +11,7 @@
 TEST_CASE("An obstacle scrolls left at SPEED pixels per second", "[obstacle]") {
     Obstacle obs(1000.0f, GROUND_Y, PLAYER_SIZE);
 
-    obs.update(1.0f);   // one full second
+    obs.update(1.0f);  // one full second
 
     REQUIRE_THAT(obs.getX(), Catch::Matchers::WithinAbs(1000.0f - SPEED, 0.001f));
 }
@@ -19,7 +19,7 @@ TEST_CASE("An obstacle scrolls left at SPEED pixels per second", "[obstacle]") {
 TEST_CASE("Scrolling scales with the frame time", "[obstacle]") {
     Obstacle obs(500.0f, GROUND_Y, PLAYER_SIZE);
 
-    obs.update(0.5f);   // half a second
+    obs.update(0.5f);  // half a second
 
     REQUIRE_THAT(obs.getX(), Catch::Matchers::WithinAbs(500.0f - SPEED * 0.5f, 0.001f));
 }

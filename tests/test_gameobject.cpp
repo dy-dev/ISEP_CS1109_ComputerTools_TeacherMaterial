@@ -4,11 +4,10 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-#include "raylib.h"
-
 #include "Board.h"
 #include "Obstacle.h"
 #include "Player.h"
+#include "raylib.h"
 
 TEST_CASE("getBounds reflects position and size", "[gameobject]") {
     Obstacle obs(100.0f, 200.0f, PLAYER_SIZE);

@@ -29,7 +29,7 @@ public:
     bool isOnGround() const;
 
 private:
-    float m_velocityY;   // pixels per second, negative upwards
+    float m_velocityY;  // pixels per second, negative upwards
 };
 
 #endif  // PLAYER_H
