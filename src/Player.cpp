@@ -21,7 +21,7 @@ void Player::jump() {
 }
 
 void Player::update(float dt) {
-    m_velocityY += GRAVITY * dt;   // gravity pulls the vertical speed down
+    m_velocityY -= GRAVITY * dt;   // gravity pulls the vertical speed down
     m_y += m_velocityY * dt;       // the speed moves the player
 
     if (m_y >= GROUND_Y) {         // landed: snap back, never compare floats with ==

@@ -9,7 +9,7 @@ Obstacle::Obstacle(float x, float y, int size)
 }
 
 void Obstacle::update(float dt) {
-    m_x -= SPEED * dt;
+    m_x -= SPEED;
 }
 
 void Obstacle::draw() const {
