@@ -1,0 +1,7 @@
+# Never send build artefacts or IDE files into the build context
+build/
+cmake-build-*/
+.idea/
+.vscode/
+.git/
+*.zip
