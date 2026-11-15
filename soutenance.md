@@ -21,14 +21,15 @@ membre doit pouvoir expliquer ses commits.
 - Ce qu'on ferait autrement avec deux semaines de plus.
 
 ## 15–20 min — Questions            ·  Tous
-Trois questions qu'on a préparées :
+Deux questions qu'on a préparées :
 1. Pourquoi une hiérarchie GameObject plutôt que deux vectors séparés ?
 2. Que se passe-t-il si on retire `* dt` dans Obstacle::update — et quel test
    le voit ?
+
+Question bonus, pour les groupes qui ont fait le lab CI en autonomie :
 3. Comment la CI garantit-elle qu'un merge ne casse pas main ?
 
 ## Avant le jour J
 - [ ] `./build.sh` passe sur la machine de démo, depuis un clone frais.
 - [ ] `demo.mp4` enregistrée (30 s).
-- [ ] Badge CI vert sur main.
 - [ ] Chacun a relu le git log et sait défendre ses commits.
