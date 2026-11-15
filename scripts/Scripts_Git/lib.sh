@@ -13,9 +13,9 @@ die() { echo "ERREUR : $*" >&2; exit 1; }
 # cmake et git sont des binaires WINDOWS : ils ne comprennent pas les chemins
 # Cygwin (/home/..., /tmp/...). Deux conséquences, traitées ici :
 #   - tout chemin passé à cmake doit être converti par cygpath -w ;
-#   - les builds de vérification se font sous C:\tmp\cs1109_check, jamais sous
+#   - les builds de vérification se font sous D:\tmp\cs1109_check, jamais sous
 #     le home Cygwin (cmake Windows n'a pas les droits ACL d'y écrire) ni sous
-#     un /tmp Cygwin (qui ne désigne pas le même dossier que C:\tmp).
+#     un /tmp Cygwin (qui ne désigne pas le même dossier que D:\tmp).
 is_cygwin() { case "$(uname -s)" in CYGWIN*|MINGW*|MSYS*) return 0;; *) return 1;; esac; }
 
 # Convertit un chemin pour un outil Windows ; sans effet ailleurs.
@@ -24,8 +24,8 @@ winpath() { if is_cygwin; then cygpath -w "$1"; else echo "$1"; fi; }
 # Racine des builds de vérification, un sous-dossier par maillon.
 check_root() {
     if is_cygwin; then
-        mkdir -p /cygdrive/c/tmp/cs1109_check
-        echo "/cygdrive/c/tmp/cs1109_check"
+        mkdir -p /cygdrive/d/tmp/cs1109_check
+        echo "/cygdrive/d/tmp/cs1109_check"
     else
         mkdir -p "${TMPDIR:-/tmp}/cs1109_check"
         echo "${TMPDIR:-/tmp}/cs1109_check"

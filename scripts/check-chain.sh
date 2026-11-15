@@ -5,7 +5,7 @@
 # Usage : ./scripts/check-chain.sh   (ne touche pas au dépôt git)
 #
 # Cygwin : cmake est le binaire Windows. Il n'écrit pas dans le home Cygwin
-# (ACL) et ne lit pas les chemins /cygdrive. On construit donc sous C:\tmp,
+# (ACL) et ne lit pas les chemins /cygdrive. On construit donc sous D:\tmp,
 # un dossier par maillon, avec les chemins convertis par cygpath.
 set -e
 source "$(dirname "$0")/lib.sh"
@@ -16,9 +16,9 @@ command -v g++   >/dev/null || die "g++ introuvable"
 T=$(mktemp -d)
 
 if command -v cygpath >/dev/null 2>&1; then
-    BROOT="/cygdrive/c/tmp/cs1109_check"
+    BROOT="/cygdrive/d/tmp/cs1109_check"
     native() { cygpath -w "$1"; }
-    info "cmake Windows détecté : build sous C:\\tmp\\cs1109_check"
+    info "cmake Windows détecté : build sous D:\\tmp\\cs1109_check"
 else
     BROOT="$T/builds"
     native() { printf '%s' "$1"; }

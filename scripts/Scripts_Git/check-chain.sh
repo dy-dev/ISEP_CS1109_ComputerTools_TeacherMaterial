@@ -6,7 +6,7 @@
 #   - les tests Catch2 passent, de la S06 au maillon final.
 #
 # Poste Windows + Cygwin : cmake et git sont des binaires Windows. Les builds se
-# font sous C:\tmp\cs1109_check (un sous-dossier par maillon) et les chemins
+# font sous D:\tmp\cs1109_check (un sous-dossier par maillon) et les chemins
 # passés à cmake sont convertis par cygpath. Ne jamais builder sous le home
 # Cygwin : cmake Windows n'a pas les droits d'y écrire.
 #
