@@ -1,8 +1,7 @@
 # CI — CS.1109 Runner
 #
-# Runs on every push and every pull request. Two jobs:
+# Runs on every push and every pull request. One job:
 #   build  : compiles the project on a bare Ubuntu runner and runs the tests
-#   docker : builds the Docker image (which runs the tests inside), after build
 #
 # A red job blocks the pull request once branch protection is enabled.
 
